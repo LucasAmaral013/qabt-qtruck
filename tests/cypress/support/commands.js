@@ -32,29 +32,32 @@
 //     //se o campo existir preenche caso contrario passa direto
 //     if(user.instagram)cy.get('input[name=instagram]').type(user.instagram)
 //     if(user.password)cy.get('input[name=password]').type(user.password)
-  
+
 //     cy.contains('button', 'Entrar').click()
 //   })
-  
+
 //   Cypress.Commands.add('modalShouldBe', (text) => {
 //     cy.get('.swal2-html-container')
 //         .should('be.visible')
 //         .should('have.text',text)
-  
+
 //   })
-  
+
 //   Cypress.Commands.add('loggedUser', (name) => {
 //     cy.get('.logged-user')
 //         .should('be.visible')
 //         .should('have.text', `Olá, ${name}`)
 //   })
 
-  Cypress.Commands.add('resetUser', (instagram) => {
-    
+import loginPage from './pages/Login'
+import mapPage from './pages/Map'
+
+Cypress.Commands.add('resetUser', (instagram) => {
+
     cy.request({
         url: 'http://localhost:3333/helpers-reset',
-        method:'DELETE',
-        qs:{instagram: instagram}
+        method: 'DELETE',
+        qs: { instagram: instagram }
     }).then(response => {
         expect(response.status).to.eql(204)
     })
@@ -62,15 +65,26 @@
 
 Cypress.Commands.add('apiCreateUser', (payload) => {
 
-  cy.resetUser(payload.instagram)
+    cy.resetUser(payload.instagram)
 
-  cy.request({
-      url: 'http://localhost:3333/signup',
-      method: 'POST',
-      body: payload
-  }).then(response => {
-      expect(response.status).to.eql(201)
-  })
+    cy.request({
+        url: 'http://localhost:3333/signup',
+        method: 'POST',
+        body: payload
+    }).then(response => {
+        expect(response.status).to.eql(201)
+    })
 })
 
-  
+Cypress.Commands.add('uiLogin', (user) => {
+    loginPage.go()
+    loginPage.form(user)
+    loginPage.submit()
+
+    mapPage.loggedUser(user.name)
+})
+
+Cypress.Commands.add('setGeoLocation',(lat, long) => {
+    localStorage.setItem('qtruck:latitude', lat)
+    localStorage.setItem('qtruck:longitude', long)
+})

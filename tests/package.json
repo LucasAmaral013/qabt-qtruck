@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Projeto de testes de ponta a ponta na web app Qtruck",
   "main": "index.js",
+  "scripts": {
+    "cy.open": "cypress open"
+  },
   "author": "Lucas Amaral",
   "license": "MIT",
   "devDependencies": {
