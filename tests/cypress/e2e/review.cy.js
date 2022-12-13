@@ -1,3 +1,6 @@
+
+import mapPage from '../support/pages/Map'
+
 describe('Avaliações', () =>{
 
     it('deve enviar uma nova avaliação', () =>{
@@ -17,13 +20,25 @@ describe('Avaliações', () =>{
             open_on_weekends: false
         }
 
+        const review = {
+            comment: 'O lanche estava muito bom, poderia ser maior',
+            stars: '4'
+        }
+
         cy.apiCreateUser(user)
         cy.apiLogin(user)
         cy.apiCreateFoodTruck(foodtruck)
 
         cy.uiLogin(user)
 
-        cy.wait(10000)
+        mapPage.goToFoodTruck(foodtruck.name)
+
+        cy.get('textarea[name=comment]').type(review.comment)
+        cy.get(`input[name=stars][value="${review.stars}"]`)
+            .click({force: true})
+        cy.contains('button', 'Enviar avaliação').click()
+
+        
     })
 
 })
