@@ -1,0 +1,21 @@
+{
+    "success": {
+        "name": "Lucas",
+        "instagram": "lucas_amaral__",
+        "password": "pwd123"
+    },
+    "inv_pass": {
+        "instagram": "lucas_amaral__",
+        "password": "pwd1234"
+    },
+    "not_found":{
+        "instagram":"@notfound",
+        "password": "pwd123"
+    },
+    "required_insta":{
+        "password":"pwd123"
+    },
+    "required_pass":{
+        "instagram":"lucas_amaral__"
+    }
+}

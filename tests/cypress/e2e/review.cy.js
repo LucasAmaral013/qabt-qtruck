@@ -1,44 +1,26 @@
-
 import mapPage from '../support/pages/Map'
+import foodTruckPage from '../support/pages/Foodtruck'
 
-describe('Avaliações', () =>{
+describe('Avaliações', () => {
 
-    it('deve enviar uma nova avaliação', () =>{
 
-        const user = {
-            name: 'Madruga Ramon',
-            instagram: '@madruguinha',
-            password:'pwd123'
-        }
 
-        const foodtruck = {
-            latitude:'-23.536291093876567',
-            longitude:'-46.46314233541489',
-            name: 'Cross Burger',
-            details: 'Os melhores lanches da região',
-            opening_hours: 'das 20h às 00h',
-            open_on_weekends: false
-        }
+    it('deve enviar uma nova avaliação', () => {
 
-        const review = {
-            comment: 'O lanche estava muito bom, poderia ser maior',
-            stars: '4'
-        }
+        cy.fixture('review').as('userReview')
 
-        cy.apiCreateUser(user)
-        cy.apiLogin(user)
-        cy.apiCreateFoodTruck(foodtruck)
+        cy.get('@userReview').then((data) => {
+            cy.apiCreateUser(data.user)
+            cy.apiLogin(data.user)
+            cy.apiCreateFoodTruck(data.foodtruck)
 
-        cy.uiLogin(user)
+            cy.uiLogin(data.user)
 
-        mapPage.goToFoodTruck(foodtruck.name)
+            mapPage.goToFoodTruck(data.foodtruck.name)
+            foodTruckPage.addReview(data.review)
+            foodTruckPage.reviewShouldBe(data.user, data.review)
+        })
 
-        cy.get('textarea[name=comment]').type(review.comment)
-        cy.get(`input[name=stars][value="${review.stars}"]`)
-            .click({force: true})
-        cy.contains('button', 'Enviar avaliação').click()
-
-        
     })
 
 })

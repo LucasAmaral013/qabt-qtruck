@@ -2,13 +2,19 @@ import loginPage from '../support/pages/Login'
 import mapPage from '../support/pages/Map'
 
 describe('Login', () => {
-  it('deve logar com sucesso', () => {
 
-    const user = {
-      name:'Lucas',
-      instagram: 'lucas_amaral__',
-      password:'pwd123'
-    }
+  beforeEach(()=> {
+    cy.fixture('login-users').then(function(users){
+      this.users = users
+    })
+  })
+
+  it('deve logar com sucesso', function () {
+
+    const user = this.users.success
+
+    cy.apiCreateUser(user)
+
     loginPage.go()
     loginPage.form(user)
     loginPage.submit()
@@ -16,13 +22,10 @@ describe('Login', () => {
     mapPage.loggedUser(user.name)
   })
 
-  it('não de logar com senha invalida', ()=> {
+  it('não de logar com senha invalida', function () {
 
-    const user = {
-      name:'Lucas',
-      instagram: 'lucas_amaral__',
-      password:'pwd1234'
-    }
+    const user = this.users.inv_pass
+
 
     loginPage.go()
     loginPage.form(user)
@@ -31,12 +34,8 @@ describe('Login', () => {
     loginPage.modal.haveText('Credenciais inválidas, tente novamente!')
   })
 
-  it('não de logar com instagram inexistente', ()=> {
-    const user = {
-      name:'Lucas',
-      instagram: 'amaral_lucas__',
-      password:'pwd1234'
-    }
+  it('não de logar com instagram inexistente', function () {
+    const user = this.users.not_found
 
     loginPage.go()
     loginPage.form(user)
@@ -45,11 +44,8 @@ describe('Login', () => {
     loginPage.modal.haveText('Credenciais inválidas, tente novamente!')
   })
 
-  it('instagram deve ser obrigatorio', ()=>{
-    const user = {
-      instagram: '',
-      password: 'pwd123'
-    }
+  it('instagram deve ser obrigatorio', function () {
+    const user = this.users.required_insta
 
     loginPage.go()
     loginPage.form(user)
@@ -57,10 +53,8 @@ describe('Login', () => {
     loginPage.modal.haveText('Por favor, informe o seu código do Instagram!')
   })
 
-  it('senha deve ser obrigatorio', ()=>{
-    const user = {
-      instagram: 'lucas_amaral__',
-    }
+  it('senha deve ser obrigatorio', function (){
+    const user = this.users.required_pass
 
     loginPage.go()
     loginPage.form(user)

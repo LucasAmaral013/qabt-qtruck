@@ -1,1 +1,8 @@
-Assistir modulo 10 
+Comandos para colocar o ambiente no ar
+
+Back-end e front-end: yarn dev
+
+Cypress: npm cypress open
+
+
+Assistir modulo 16
